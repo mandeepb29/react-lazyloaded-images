@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 const ImageLoader = ({ src, placeholder, alt }) => {
   const [imageSrc, setImageSrc] = useState(placeholder);
   const imageRef = useRef(null);
 
-  const onLoad = () => {
+  const onLoad = useCallback(() => {
     setImageSrc(src);
-  };
+  }, [src])
 
   useEffect(() => {
     let observer;
@@ -42,7 +42,7 @@ const ImageLoader = ({ src, placeholder, alt }) => {
         observer.unobserve(currentImageRef);
       }
     };
-  }, [src, imageSrc]);
+  }, [src, imageSrc, onLoad]);
 
   return (
     <img
