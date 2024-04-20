@@ -11,8 +11,8 @@ const ImageLoader = ({ src, placeholder, alt }) => {
   useEffect(() => {
     let observer;
     let didCancel = false;
-
-    if (imageRef.current && imageSrc !== src) {
+    const currentImageRef = imageRef.current;
+    if (currentImageRef && imageSrc !== src) {
       if (IntersectionObserver) {
         observer = new IntersectionObserver(
           //callback funtion when image cones in viewport
@@ -20,7 +20,7 @@ const ImageLoader = ({ src, placeholder, alt }) => {
             entries.forEach(entry => {
               if (!didCancel && (entry.intersectionRatio > 0 || entry.isIntersecting)) {
                 setImageSrc(src);
-                observer.unobserve(imageRef.current);
+                observer.unobserve(currentImageRef);
               }
             });
           },
@@ -29,7 +29,7 @@ const ImageLoader = ({ src, placeholder, alt }) => {
             rootMargin: '75%'
           }
         );
-        observer.observe(imageRef.current);
+        observer.observe(currentImageRef);
       } else {
         //fallback for old browsers
         onLoad();
@@ -39,7 +39,7 @@ const ImageLoader = ({ src, placeholder, alt }) => {
       didCancel = true;
 
       if (observer && observer.unobserve) {
-        observer.unobserve(imageRef.current);
+        observer.unobserve(currentImageRef);
       }
     };
   }, [src, imageSrc]);
